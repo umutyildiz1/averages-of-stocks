@@ -1,0 +1,10 @@
+-----Proje Gereksinimleri
+*client ile server kısımları bağlanacak
+*stock isimlerini her zaman büyük harfle tabloya kayıt edilecek
+
+
+-----Teknik Geliştirmek için yapılacaklar
+*Rest Controller http status kodları özelleştirebilir
+*Generic bir hata yakalayan yapı kurulabilir
+*Filter ve interceptör arasındaki farklar araştırılıp projede kullanılabilir
+*Unit Testler yazılabilir

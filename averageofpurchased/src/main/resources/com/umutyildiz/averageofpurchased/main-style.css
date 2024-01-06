@@ -1,0 +1,19 @@
+.choice-box {
+
+}
+
+.choice-box .label {
+    -fx-background-color: #fff;
+    -fx-padding: 2 8 2 8;
+    -fx-border-color: #ccc;
+    -fx-border-radius: 4;
+}
+
+.choice-box .arrow-button {
+    -fx-background-color: #fff;
+}
+
+.choice-box-popup .list-view {
+    -fx-background-color: #fff;
+    -fx-border-color: #ccc;
+}
