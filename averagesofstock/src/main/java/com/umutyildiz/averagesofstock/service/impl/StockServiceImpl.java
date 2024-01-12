@@ -77,7 +77,10 @@ public class StockServiceImpl implements StockService {
         BigDecimal quantity = amount.getQuantity();
 
         if(Arrays.asList(0,1).contains(quantity.subtract(reducedQuantity).compareTo(BigDecimal.ZERO))){
-            amount.setQuantity(quantity.subtract(reducedQuantity));
+            BigDecimal lastQuantity = quantity.subtract(reducedQuantity);
+            if (lastQuantity.compareTo(BigDecimal.ZERO) == 0)
+                amount.setAverageAmount(BigDecimal.ZERO);
+            amount.setQuantity(lastQuantity);
             amountService.add(amount);
         }
     }
