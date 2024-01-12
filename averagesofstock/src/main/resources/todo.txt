@@ -1,6 +1,7 @@
 -----Proje Gereksinimleri
 *client ile server kısımları bağlanacak
 *stock isimlerini her zaman büyük harfle tabloya kayıt edilecek
+*stock silme ui ve backendi yapılacak
 
 
 -----Teknik Geliştirmek için yapılacaklar
