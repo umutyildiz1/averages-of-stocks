@@ -9,10 +9,14 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import com.umutyildiz.averageofpurchased.dto.CategoryDto;
 import com.umutyildiz.averageofpurchased.dto.StockDto;
 import com.umutyildiz.averageofpurchased.utility.EndpointDefinition;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -20,19 +24,21 @@ import java.util.Arrays;
 
 public class MainController {
 
-    /*@FXML
-    Button button1;
-
-    @FXML
-    private void handle(ActionEvent event){
-        button1.setText("UMMUUUUUT");
-    }*/
-
     @FXML
     Button categoryButton;
 
     @FXML
-    ChoiceBox<String> categoryList;
+    ChoiceBox<String> categoryBox;
+
+    @FXML
+    TableView<StockDto> stockTable;
+
+    @FXML
+    TableColumn<StockDto, String> nameColumn;
+    @FXML
+    TableColumn<StockDto, String> quantityColumn;
+    @FXML
+    TableColumn<StockDto, String> averagePriceColumn;
 
     private final Gson gson = new Gson();
 
@@ -58,12 +64,12 @@ public class MainController {
             }.getType();
             ArrayList<CategoryDto> categoryList = gson.fromJson(apiResponse.getBody().toString(), type);
 
-            if (!this.categoryList.getItems().isEmpty()) {
-                this.categoryList.getItems().clear();
+            if (!categoryBox.getItems().isEmpty()) {
+                categoryBox.getItems().clear();
             }
 
             for (CategoryDto category : categoryList) {
-                this.categoryList.getItems().add(category.getName());
+                categoryBox.getItems().add(category.getName());
             }
         } catch (Exception e) {
             System.out.println("MC0001 ".concat(e.toString()));
@@ -74,7 +80,7 @@ public class MainController {
     public void getStocks() {
         Task<String> task = new Task<>() {
             @Override
-            protected String call(){
+            protected String call() {
 
                 getStockList();
                 return "success";
@@ -85,11 +91,11 @@ public class MainController {
     }
 
     private void getStockList() {
-        String choosenCategoryName = categoryList.getValue();
+        String choosenCategoryName = categoryBox.getValue();
         Type type = new TypeToken<ArrayList<StockDto>>() {
         }.getType();
 
-        if (choosenCategoryName.isEmpty()){
+        if (choosenCategoryName.isEmpty()) {
             return;
         }
 
@@ -98,16 +104,24 @@ public class MainController {
                     concat(EndpointDefinition.STOCK).
                     concat(choosenCategoryName));
 
-            ArrayList<StockDto> stockList = gson.fromJson(apiResponse.getBody().toString(), type);
+            ArrayList<StockDto> stockList = apiResponse.getBody().toString()
+                    .equals("{}") ? new ArrayList<>() : gson.fromJson(apiResponse.getBody().toString(), type);
 
-            for (StockDto stockDto : stockList){
-                System.out.println("anaaaaa: " + stockDto);//buradaki stockları tabloya sırasıyla yaz
-            }
+
+            fillStockTable(FXCollections.observableList(stockList));
 
 
         } catch (Exception e) {
-            System.out.println("MC0002 ".concat(Arrays.toString(e.getStackTrace())));
+            System.out.println("MC0002 ".concat(Arrays.toString(e.getCause().toString().toCharArray())));
         }
+    }
+
+    private void fillStockTable(ObservableList<StockDto> stockList) {
+        nameColumn.setCellValueFactory(cell -> cell.getValue().getNameProperty());
+        quantityColumn.setCellValueFactory(cell -> cell.getValue().getQuantityProperty());
+        averagePriceColumn.setCellValueFactory(cell -> cell.getValue().getAveragePriceProperty());
+
+        stockTable.setItems(stockList);
     }
 
     private HttpResponse<JsonNode> makeRestCallGet(String endpoint) throws UnirestException {

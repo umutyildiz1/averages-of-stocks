@@ -1,10 +1,7 @@
 package com.umutyildiz.averagesofstock;
 
-import com.umutyildiz.averageofpurchased.*;
 import com.umutyildiz.averageofpurchased.Main;
 import javafx.application.Application;
-import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
